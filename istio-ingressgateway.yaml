@@ -1,0 +1,43 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: ingress-gateway
+  namespace: ingress-nginx
+spec:
+  selector:
+    istio: ingressgateway  # Use Istio's ingress gateway
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "*"  # Accept traffic from any host
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: nginx-apache-virtualservice
+  namespace: ingress-nginx
+spec:
+  hosts:
+  - "*"  # Match any host (any incoming domain or IP)
+  gateways:
+  - ingress-gateway
+  http:
+  - match:
+    - uri:
+        prefix: /nginx
+    route:
+    - destination:
+        host: nginx-service
+        port:
+          number: 80
+  - match:
+    - uri:
+        prefix: /apache
+    route:
+    - destination:
+        host: apache-service
+        port:
+          number: 80
