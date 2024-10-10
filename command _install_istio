@@ -1,0 +1,38 @@
+# You can download it directly using the command
+
+curl -L https://istio.io/downloadIstio | ISTIO_VERSION=1.19.0 sh -
+
+# Add istioctl to Your PATH: After downloading, you will get an Istio directory (e.g., istio-1.19.0). 
+# Change to that directory and add the istioctl tool to your system's PATH:
+
+cd istio-1.19.0
+export PATH=$PWD/bin:$PATH
+
+# Verify Installation: You can verify that istioctl is installed and accessible by checking the version:
+
+istioctl version
+
+Run the Istio Installation Command - Once istioctl is installed, you can proceed with installing Istio using the demo profile by running:
+
+istioctl install --set profile=demo -y
+istioctl install --set profile=default -y
+
+Key Differences:
+Feature	Demo Profile (profile=demo)	                             Default Profile (profile=default)
+Prometheus	Included	                                           Not included
+Grafana	Included                          	                     Not included
+Jaeger (Tracing)	Included	                                     Not included
+Kiali (Service Mesh GUI)	Included	                             Not included
+Egress Gateway	Included	                                       Not included
+Sidecar Injection	Enabled	                                       Enabled
+Resource Consumption	Higher (due to extra components)	         Lower (more lightweight)
+
+# Label your namespace monitoring to enable automatic sidecar injection:
+# The command kubectl label namespace ingress-nginx istio-injection=enabled is important because it enables automatic sidecar injection of the Istio Envoy proxy into all pods within the ingress-nginx namespace. 
+# This is crucial for integrating services in that namespace into the Istio service mesh.
+
+kubectl label namespace ingress-nginx istio-injection=enabled
+
+# Configure Istio Gateway and VirtualService
+# Now that Istio is installed and enabled for the monitoring namespace, let’s set up the Istio ingress gateway and virtual service to route traffic to the NGINX service.
+
