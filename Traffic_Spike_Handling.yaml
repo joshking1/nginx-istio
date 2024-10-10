@@ -1,0 +1,16 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: nginx-destination
+spec:
+  host: nginx-service
+  trafficPolicy:
+    connectionPool:
+      http:
+        http1MaxPendingRequests: 1000
+        maxRequestsPerConnection: 50
+    outlierDetection:
+      consecutiveErrors: 5
+      interval: 5s
+      baseEjectionTime: 30s
+      maxEjectionPercent: 100
