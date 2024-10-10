@@ -1,0 +1,10 @@
+# NGINX Ingress Controller Installation:
+# You'll need to install the NGINX Ingress controller to handle the ingress resources. This can be done using Helm or Kubernetes manifests.
+# Using Helm:
+kubectl create namespace ingress-nginx
+helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+helm repo update
+helm install nginx-ingress ingress-nginx/ingress-nginx --namespace ingress-nginx
+# Once installed, you can verify that everything is working by checking the status of the pods and services in the ingress-nginx namespace:
+kubectl get pods -n ingress-nginx
+kubectl get svc -n ingress-nginx
